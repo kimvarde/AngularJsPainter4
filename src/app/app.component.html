@@ -1,0 +1,51 @@
+<!--The content below is only a placeholder and can be replaced.-->
+<form #frmPaint="ngForm">
+    <div class="container">    <!-- bootstrap /container -->                
+        <div class="row justify-content-center"> <!-- boorstrap grid system -->
+            <span *ngFor="let ip of RGBInputs">
+                <span class="input-group">
+                    <span class="input-group-btn">
+                        <button class="btn {{ip.BtnStyle}}" type="button">{{ip.Text}}</button>
+                    </span>
+                    <input style="width:50px" type="number" name="input_{{ip.Text}}" [(ngModel)]="ip.ColorValue" pattern="\d+" ngModel min="{{ip.Min}}" max="{{ip.Max}}" ng-keyup="ip.Keyup" />
+                </span>
+            </span>
+            <span class="col">
+                <span class="input-group">
+                    <span class="input-group-addon">
+                        Brush Size
+                    </span>                    
+                    <input type="text" class="form-control" name="eleBrushSize" [(ngModel)]="brushSize" placeholder="Select brush size" aria-label="Select brush size...">                   
+                </span>
+            </span>
+            <span class="col">
+                <span class="input-group">
+                    <span class="input-group-addon">
+                        <input name="eleGradient" type="checkbox" aria-label="Use Gradient" [(ngModel)]="useGradient" />
+                    </span>
+                    <span class="input-group-addon">Use Gradient</span>
+                </span>
+            </span>
+            <span class="col">
+                <button (click)="clearDrawing()" class="btn btn-secondary">Clear All</button>
+            </span>
+        </div>
+    </div>
+    <br/>        
+    <div *ngIf="frmPaint.valid; else ValidationFailMsg" class="canvas-container" >        
+        <button class="btn">                           
+            Drawing Canvas - Selected Color:    
+            <span class="btn btn-sm" [ngStyle]="palleteStyle()">
+                &nbsp;
+            </span>
+        </button>     
+        <br />
+        <canvas #canvasRefElement name="asd"  id="paintArea" width="{{canvasWidth}}" height="{{canvasHeight}}" style="border-color:lightgray;border-style:solid" (mousedown)="canvasStart($event)" (mousemove)="canvasDraw($event)" (mouseup)="canvasEnd($event)" (contextmenu)="canvasRightclick($event)">                       
+        </canvas>
+    </div>  
+    <ng-template #ValidationFailMsg>
+        <div class="alert alert-danger" role="alert">
+        Invalid values for RGB
+        </div>
+    </ng-template>
+</form>
